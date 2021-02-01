@@ -63,6 +63,12 @@ describe('app', function() {
         expect(testApp.get(2).content).to.equal('update')
       });
 
+      it('getAll returns all messages', function() {
+          expect(testApp.getAll()).to.be.an('array');
+          expect(testApp.getAll().length).to.equal(1);
+      })
+
+      //below section tests the fs data
       it("app reads from given filepath", function() {
 
         //first test there's nothing in the arr
@@ -76,11 +82,33 @@ describe('app', function() {
         //now we set a new variable and read the message(s) previously posted
         let testFileReadApp = new MessageApp("/\///json/\//testMessages.json")
         expect(testFileReadApp.messages.length).to.equal(1);
-        
+
         //last we test delete
         testFileReadApp.delete(1)
         let testFileClearApp = new MessageApp("/\///json/\//testMessages.json")
         expect(testFileClearApp.messages.length).to.equal(0);
 
       });
+
+      //below tests are for edge cases without the 'hi world' input and empty post
+      it('rejects empty messages', function() {
+          let testApp = new MessageApp();
+          expect(testApp.post('')).to.deep.equal([]);
+      });
+
+      it("no messages if no messages are sent", function() {
+        let testApp = new MessageApp()
+        expect(testApp.getAll()).to.deep.equal([])
+      });
+
+      it("rejects false update", function() {
+        let testApp = new MessageApp()
+        expect(testApp.update(0, "")).to.deep.equal([])
+      });
+
+      it("errors if no message to delete", function() {
+        let testApp = new MessageApp()
+        expect(testApp.delete(0)).to.deep.equal('Message not found in database')
+      });
+
 })
