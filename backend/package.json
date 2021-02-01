@@ -4,8 +4,8 @@
   "description": "A simple message app in MERN stack with testings",
   "main": "app.js",
   "scripts": {
-    "test": "mocha -r esm app.test.js",
-    "start": "node -r esm app.js"
+    "test": "mocha -r esm ./app.test.js",
+    "start": "node -r esm ./app.js"
   },
   "keywords": [],
   "author": "Joanne Chen",
