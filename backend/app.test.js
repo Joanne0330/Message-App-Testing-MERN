@@ -64,7 +64,23 @@ describe('app', function() {
       });
 
       it("app reads from given filepath", function() {
-        let testFileApp = new MessageApp("/\///json/\//testMessages.json")
-        expect(testFileApp.messages.length).to.equal(1)
+
+        //first test there's nothing in the arr
+        let testFileWriteApp = new MessageApp("/\///json/\//testMessages.json")
+        expect(testFileWriteApp.messages.length).to.equal(0);
+
+        //then post one message and see if there's 1 in the arr
+        testFileWriteApp.post("Hi")
+        expect(testFileWriteApp.messages.length).to.equal(1);
+
+        //now we set a new variable and read the message(s) previously posted
+        let testFileReadApp = new MessageApp("/\///json/\//testMessages.json")
+        expect(testFileReadApp.messages.length).to.equal(1);
+        
+        //last we test delete
+        testFileReadApp.delete(1)
+        let testFileClearApp = new MessageApp("/\///json/\//testMessages.json")
+        expect(testFileClearApp.messages.length).to.equal(0);
+
       });
 })
