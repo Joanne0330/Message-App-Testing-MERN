@@ -69,7 +69,7 @@ describe('app', function() {
       })
 
       //below section tests the fs data
-      it("app reads from given filepath", function() {
+      xit("app reads from given filepath", function() {
 
         //first test there's nothing in the arr
         let testFileWriteApp = new MessageApp("/\///json/\//testMessages.json")
