@@ -16,10 +16,10 @@ if (process.env.npm_lifecycle_event == "test") {
 function getAll(){
   return new Promise((resolve, reject) => {
     var result = messageApp.getAll()
-        if (result !== []) {
-        resolve(result)
+        if (result.length !== 0) {
+        resolve(result)  // if status 200
         } else {
-        reject(result)
+        reject("No messages in database")  // if status 404
         }
   })
 }
@@ -27,21 +27,21 @@ function getAll(){
 function getSingleMessage(id) {
     return new Promise((resolve, reject) => {
         let result = messageApp.get(id)
-            if(result !== []) {
+            if(result) {
                 resolve(result)
             } else {
-                reject(result)
+                reject("Message not found in database")
             }
     })
 }
 
 function updateMessage(id, content){
     return new Promise((resolve, reject) => {
-      let result = messageApp.update(id, content)
-      if (result !== []) {
-        resolve(result)
+      let message = messageApp.update(id, content)
+      if (message.length !== 0) {
+        resolve(message)
       } else {
-        reject(result)
+        reject("Cannot find origianl message to update")
       }
     })
   }
@@ -52,7 +52,7 @@ function post(content) {
             if(message !== []) {
                 resolve(message)
             } else {
-                reject(message)
+                reject("You can't post an empty message")
             }
     })
 }
