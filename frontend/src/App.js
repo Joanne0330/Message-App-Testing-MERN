@@ -1,32 +1,19 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './App.css';
 
-function MessageApp() {
-  return(
-    <div className="App">
-      <h1>Message App</h1>
-      <textarea 
-        id='message_box' 
-        placeholder='write a message...'
-      >
-      </textarea>
-      <br />
-      <button
-        id='submit'
-        type='submit'
-        name='Submit'
-      >
-      Submit Message
-      </button>
-      <br/>
-      <ul
-        id='message_list'
-      >message
-        <li></li>
-      </ul>
-  
-    </div>
-  )
+import MessageList from './components/messageList.js';
+import MessageForm from './components/messageForm.js';
+
+class MessageApp extends React.Component {
+  render(){
+    return (
+      <div className="App">
+      <MessageForm/>
+      <MessageList/>
+      </div>
+    );
+  }
 }
+
 
 export default MessageApp;
