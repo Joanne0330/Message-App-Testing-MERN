@@ -10,12 +10,18 @@ Enzyme.configure({ adapter: new Adapter() })
 describe('MessageApp', () => {
 
   beforeEach(function(){ // setting up axios Promise mock
+    //post
     mockAxios.post.mockImplementation(() =>
     Promise.resolve({ data: [] }))
+    //getall
+    mockAxios.get.mockImplementation(() =>
+    Promise.resolve({data: [{id:1, content:'hello', date:'2000'}]}))
+  
   })
   
   afterEach(function(){ // clear the axios Promise mock
     mockAxios.post.mockClear()
+    mockAxios.get.mockClear()
   })
 
   // @testing the UI interface
@@ -41,11 +47,18 @@ describe('MessageApp', () => {
   })
 })
 
-  // @ testing axios mocks 
+  // @ testing axios mocks on the form component
   it('posts data and clears message box on submit success', () => {
     const component = mount(<MessageApp/>);
     component.find('textarea#message_box').simulate('change', { target: { value: 'Hello' } })
     component.find('form').simulate('submit')
     expect(mockAxios.post).toHaveBeenCalledWith("http://localhost:3001/message", {"content": "Hello"});
     expect(component.instance().refs.messageFormRef.state.currentMessage).toEqual('');
+  
+  });
+
+  // @ testing GET mock axios call is made to the server
+  it('Loads data from api when page loads', () => {
+    mount(<MessageApp />);
+    expect(mockAxios.get).toHaveBeenCalledTimes(1);
   });
