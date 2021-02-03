@@ -3,6 +3,7 @@ import './App.css';
 
 import MessageList from './components/messageList.js';
 import MessageForm from './components/messageForm.js';
+import ErrorHandler from './components/errorHandler.js';
 
 import axios from 'axios';
 const PORT = 'http://localhost:3001';
@@ -11,34 +12,53 @@ class MessageApp extends React.Component {
   constructor(){
     super()
     this.state = {
-      messages: []
+      messages: [], 
+      error: null
     }
   }
 
   componentDidMount() {
     this.getAllMessages();
   }
+  setError(error) {
+    this.setState({error: error})
+  }
+
+  setMessages(messages) {
+    this.setState({messages: messages})
+  }
 
   getAllMessages = async() => {
-    const result = await axios.get(`${PORT}/`)
-
-    this.setState({messages: result.data})
+    try {
+      const result = await axios.get(`${PORT}/`)
+  
+      this.setState({messages: result.data})
       // .then((result)  =>  {
-      //   this.setState({
-      //   messages: result.data
-      //   })
-      // })
+        //   this.setState({
+        //   messages: result.data
+        //   })
+        // })      
+    } catch (err) {
+      this.setError(err)
+    }
   }
 
   submitMessage = (data) => {
     axios.post(`${PORT}/message`, {
       content: data
     })
+    .then(result => {
+      this.getAllMessages()
+    })
+    .catch(err => {
+      this.setError(err)
+    })
   }
 
   render(){
     return (
       <div className="App">
+      <ErrorHandler error={this.state.error} />
       <MessageForm
         ref='messageFormRef'
         submitMessage={this.submitMessage} // this calls for child to be connect to the func in this state
