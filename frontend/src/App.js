@@ -43,30 +43,61 @@ class MessageApp extends React.Component {
     }
   }
 
-  submitMessage = (data) => {
-    axios.post(`${PORT}/message`, {
-      content: data
+  submitMessage = async (data) => {
+    try {
+      const result = await axios.post(`${PORT}/message`, { content: data })
+      this.getAllMessages();
+    } catch (err) {
+      this.setError(err)
+    }
+    // axios.post(`${PORT}/message`, {
+    //   content: data
+    // })
+    // .then(result => {
+    //   this.getAllMessages()
+    // })
+    // .catch(err => {
+    //   this.setError(err)
+    // })
+  }
+  deleteMessage = (id) => {
+    axios.delete(`${PORT}/delete/${id}`, {
+      id: id
     })
-    .then(result => {
+    .then((result)=>{
       this.getAllMessages()
     })
-    .catch(err => {
-      this.setError(err)
+    .catch((err)=>{
+      this.setError(err);
+    })
+  }
+
+  sendUpdate = (id, content) => {
+    axios.put(`${PORT}/update/${id}`, {
+      content: content
+    })
+    .then((result)=>{
+      this.getAllMessages()
+    })
+    .catch((err)=>{
+      this.setState(err)
     })
   }
 
   render(){
     return (
       <div className="App">
-      <ErrorHandler error={this.state.error} />
       <MessageForm
         ref='messageFormRef'
         submitMessage={this.submitMessage} // this calls for child to be connect to the func in this state
-      />
+        />
       <MessageList
         ref='messageListRef'
         messages={this.state.messages}
-      />
+        deleteMessage={this.deleteMessage}
+        sendUpdate={this.sendUpdate}
+        />
+      <ErrorHandler error={this.state.error} />
       </div>
     );
   }
